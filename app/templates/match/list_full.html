@@ -1,0 +1,305 @@
+﻿{% extends 'base.html' %}
+{% load my_tags %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <style>
+        h6 {
+            color: #0a0c0d;
+        }
+    </style>
+    <div id="top" class="row">
+        <div class="col-sm-3">
+            <h2> Partidas</h2>
+        </div>
+    </div> <!-- /#top -->
+    <hr/>
+    <form id="advancedForm" method="get" action="{% url 'MATCH_list' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3">
+                        <label>Data Inicial: </label>
+                        {{ filter.form.data_inicial }}
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label>Data Final: </label>
+                        {{ filter.form.data_final }}
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label>Time 1: </label>
+                        {{ filter.form.time1 }}
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <label>Time 2: </label>
+                        {{ filter.form.time2 }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 8px;">
+                    <div class="col-xs-12 col-sm-3">
+                        <label>Competição: </label>
+                        {{ filter.form.competicao }}
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-primary" id="search_btn">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                        <button type="button" class="btn btn-default" id="clear">
+                            <i class="fa fa-close"></i> Clear
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="col-xs-12">
+                <label for="search">Search:</label>
+                <div class="row">
+                    <div class="col-xs-10">
+                        <input type="text" id="search" name="search" placeholder="" value="{{ search }}"/>
+                        <input type="text" class="hidden" name="ordering" id="ordering" value="{{ ordering }}"/>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            {% for match in matchs %}
+                <div class="col-xs-12">
+                    <a href="{% url 'MATCH_detail' match.pk %}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <div class="row text-center">
+                                    <h5>{{ match.competicao }}</h5>
+                                    <h6>{{ match.estadio }}</h6>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="row text-center">
+                                            <div class="col-xs-6">
+                                                {{ match.time1 }}
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <img src="{{ match.time1.brasao }}"
+                                                     style="max-height: 30px;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="row text-center">
+                                            <div class="col-xs-4">
+                                                {% if match.placar1 %}
+                                                    {{ match.placar1 }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-xs-4">x</div>
+                                            <div class="col-xs-4">
+                                                {% if match.placar2 %}
+                                                    {{ match.placar2 }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <div class="row text-center">
+                                            <div class="col-xs-6">
+                                                <img src="{{ match.time2.brasao }}" class="pull-left"
+                                                     style="max-height: 30px;"/>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                {{ match.time2 }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="row text-center">
+                                    <div class="col-xs-12">
+                                        <h6>{{ match.data|date:"d/m/Y" }} às {{ match.horario }}</h6>
+                                        <h6>{{ match.local }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <hr/>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                        <span class="current pull-left">
+                            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. ({{ page_obj.start_index }}—{{ page_obj.end_index }})
+                        </span>
+                {% if is_paginated %}
+                    <ul class="pagination pagination-flat pull-right">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% if page_obj.number|add:'-4' > 1 %}
+                            <li><a href="?{% param_replace page=page_obj.number|add:'-5' %}">&hellip;</a></li>
+                        {% endif %}
+
+                        {% for i in page_obj.paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="page-item active"><span>{{ i }} <span
+                                        class="sr-only">(current)</span></span>
+                                </li>
+                            {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?{% param_replace page=i %}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.number|add:'5' %}">&hellip;</a>
+                            </li>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.next_page_number %}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+
+        </div>
+    </form>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#match_link').addClass('active');
+
+            $('input,select').addClass('form-control');
+
+            $('#id_data_inicial').attr('type', 'date');
+            $('#id_data_final').attr('type', 'date');
+
+            $('#id_time1').select2({
+                ajax: {
+                    url: '/api/time/',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            nome_comum: params.term
+                        }
+                        return query;
+                    },
+                    processResults: function (data) {
+                        new_data = []
+                        data.forEach(function (elem) {
+                            new_data.push({
+                                id: elem.id,
+                                text: elem.nome_comum
+                            });
+                        });
+                        return {
+                            results: new_data
+                        };
+                    }
+                }
+            });
+
+            $('#id_time2').select2({
+                ajax: {
+                    url: '/api/time/',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            nome_comum: params.term
+                        }
+                        return query;
+                    },
+                    processResults: function (data) {
+                        new_data = []
+                        data.forEach(function (elem) {
+                            new_data.push({
+                                id: elem.id,
+                                text: elem.nome_comum
+                            });
+                        });
+                        return {
+                            results: new_data
+                        };
+                    }
+                }
+            });
+
+
+            $('#clear').click(function () {
+                $("form")[0].reset();
+                $('input,select,textarea').val('');
+                $("form").submit();
+            });
+
+            function generate_icon(element, text, column) {
+                if (text.includes('-')) {
+                    $(element).empty();
+                    $(element).append(
+                        column.toUpperCase() + '<i class="fa fa-angle-up"></i>'
+                    );
+                } else {
+                    $(element).empty();
+                    $(element).append(
+                        column.toUpperCase() + '<i class="fa fa-angle-down"></i>'
+                    );
+                }
+            }
+
+            var column_ordering = '{{ ordering }}';
+            var previous_column = '{{ ordering }}'.replace('-', '');
+
+            function initialize_ordering() {
+                var elem = $('th:contains("' + previous_column.toUpperCase() + '")');
+                generate_icon(elem, column_ordering, previous_column);
+            }
+
+            initialize_ordering();
+
+            $('th').click(function () {
+                var text = $(this).text();
+                //console.log('text', text);
+                if (text !== 'Actions') {
+                    var column = text.toLowerCase();
+                    //console.log(column_ordering === column);
+                    if (column_ordering === column) {
+                        column_ordering = '-' + column
+                    } else {
+                        column_ordering = column
+                    }
+                    //console.log(column_ordering);
+                    $('[name="ordering"]').val(column_ordering.trim());
+                    $("form").submit();
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}

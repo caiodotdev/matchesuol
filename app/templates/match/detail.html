@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <h3 class="page-header">View Match</h3>
+
+    <div class="row">
+        <div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Id_match:</label> 
+
+{{ object.id_match }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Competicao:</label> 
+
+{{ object.competicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Id_competicao:</label> 
+
+{{ object.id_competicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Time1:</label> 
+
+{{ object.time1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Time2:</label> 
+
+{{ object.time2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Data:</label> 
+
+{{ object.data }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Horario:</label> 
+
+{{ object.horario }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Local:</label> 
+
+{{ object.local }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Estadio:</label> 
+
+{{ object.estadio }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Rodada:</label> 
+
+{{ object.rodada }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Posicao:</label> 
+
+{{ object.posicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Placar1:</label> 
+
+{{ object.placar1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Placar2:</label> 
+
+{{ object.placar2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Penalti1:</label> 
+
+{{ object.penalti1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Penalti2:</label> 
+
+{{ object.penalti2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Eliminou_jogo_volta:</label> 
+
+{{ object.eliminou_jogo_volta }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Classificou_gols_fora:</label> 
+
+{{ object.classificou_gols_fora }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Datahora:</label> 
+
+{{ object.datahora }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Desempate_time1:</label> 
+
+{{ object.desempate_time1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Desempate_time2:</label> 
+
+{{ object.desempate_time2 }} 
+ </div> 
+ </div> 
+
+    </div>
+    <hr/>
+    <div id="actions" class="row">
+        <div class="col-md-12">
+            <a class="btn btn-primary" href="{% url 'MATCH_update' match.pk %}">
+                Edit
+            </a>
+            <a href="{% url 'MATCH_list' %}" class="btn btn-default">Back</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#match_link').addClass('active');
+        });
+    </script>
+{% endblock %}

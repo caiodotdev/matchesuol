@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <h3 class="page-header">Update Match</h3>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Id_match:</label> 
+{{ form.id_match }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Competicao:</label> 
+{{ form.competicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Id_competicao:</label> 
+{{ form.id_competicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Time1:</label> 
+{{ form.time1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Time2:</label> 
+{{ form.time2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Data:</label> 
+{{ form.data }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Horario:</label> 
+{{ form.horario }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Local:</label> 
+{{ form.local }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Estadio:</label> 
+{{ form.estadio }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Rodada:</label> 
+{{ form.rodada }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Posicao:</label> 
+{{ form.posicao }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Placar1:</label> 
+{{ form.placar1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Placar2:</label> 
+{{ form.placar2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Penalti1:</label> 
+{{ form.penalti1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Penalti2:</label> 
+{{ form.penalti2 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Eliminou_jogo_volta:</label> 
+{{ form.eliminou_jogo_volta }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Classificou_gols_fora:</label> 
+{{ form.classificou_gols_fora }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Datahora:</label> 
+{{ form.datahora }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Desempate_time1:</label> 
+{{ form.desempate_time1 }} 
+ </div> 
+ </div> 
+<div class="col-xs-12"> 
+ <div class="form-group"> 
+ <label>Desempate_time2:</label> 
+{{ form.desempate_time2 }} 
+ </div> 
+ </div> 
+
+                    </div>
+                    <div class="panel-footer">
+                        <div id="actions" class="row">
+                            <div class="col-md-12">
+                               <button id="btn_atualizar" class="btn btn-primary" type="submit">
+                                    Update
+                                </button>
+                                <a href="{% url 'MATCH_list' %}" class="btn btn-default">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#match_link').addClass('active');
+
+            $('#id_competicao').select2({
+    ajax: {
+        url: '/api/competicao/',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                nome: params.term
+            }
+            return query;
+        },
+        processResults: function (data) {
+            new_data = []
+            data.forEach(function(elem){
+                new_data.push({
+                    id: elem.id,
+                    text: elem.nome
+                });
+            });
+            return {
+                results: new_data
+            };
+        }
+    }
+});
+$('#id_time1').select2({
+    ajax: {
+        url: '/api/time1/',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                id: params.term
+            }
+            return query;
+        },
+        processResults: function (data) {
+            new_data = []
+            data.forEach(function(elem){
+                new_data.push({
+                    id: elem.id,
+                    text: elem.id
+                });
+            });
+            return {
+                results: new_data
+            };
+        }
+    }
+});
+$('#id_time2').select2({
+    ajax: {
+        url: '/api/time2/',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                id: params.term
+            }
+            return query;
+        },
+        processResults: function (data) {
+            new_data = []
+            data.forEach(function(elem){
+                new_data.push({
+                    id: elem.id,
+                    text: elem.id
+                });
+            });
+            return {
+                results: new_data
+            };
+        }
+    }
+});
+
+        });
+    </script>
+{% endblock %}

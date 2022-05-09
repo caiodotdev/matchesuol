@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load form_utils %}
+{% block content %}
+    <h3 class="page-header">View Time</h3>
+
+    <div class="row">
+        <div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Id_time:</label> 
+
+{{ object.id_time }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Nome_completo:</label> 
+
+{{ object.nome_completo }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Nome_comum:</label> 
+
+{{ object.nome_comum }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Brasao:</label> 
+
+{{ object.brasao }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Sigla:</label> 
+
+{{ object.sigla }} 
+ </div> 
+ </div> 
+<div class="col-xs-4"> 
+ <div class="form-group"> 
+ <label>Tipo:</label> 
+
+{{ object.tipo }} 
+ </div> 
+ </div> 
+
+    </div>
+    <hr/>
+    <div id="actions" class="row">
+        <div class="col-md-12">
+            <a class="btn btn-primary" href="{% url 'TIME_update' time.pk %}">
+                Edit
+            </a>
+            <a href="{% url 'TIME_list' %}" class="btn btn-default">Back</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#time_link').addClass('active');
+        });
+    </script>
+{% endblock %}
