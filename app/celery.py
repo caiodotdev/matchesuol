@@ -16,6 +16,10 @@ app.conf.beat_schedule = {
         'task': 'app.tasks.update_matches',
         'schedule': crontab(minute="*/2"),
     },
+    'alert-today': {
+        'task': 'app.tasks.alert_matches_today',
+        'schedule': crontab(minute="*/2"),
+    }
 }
 
 
