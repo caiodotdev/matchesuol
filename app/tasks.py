@@ -1,14 +1,17 @@
 import datetime
+import os
 
-from celery import shared_task
+import pandas as pd
+import requests
 from django_celery_results.models import TaskResult
 
+from app.cloudinary_api import upload_file
 from app.predictz import PredictZ
+from celery import shared_task
 
-from .models import Match, Competicao, Time
+from .models import Competicao, Match, Time
 from .serializers import MatchSerializer
 from .uol_jogos import UolAPI
-import requests
 
 """
 This module defines various Celery tasks used for Spleeter Web.
@@ -149,6 +152,7 @@ def alert_matches_predict():
     matches = predict.get_matches()
     message = '🔔 Predições de HOJE: \n\n'
     MESSAGE_ITEM = "⚽ {} \n Predict Score: {} \n Predict Result: {} \n\n"
+    write_csv(matches)
     print('---matches predict: ', len(matches))
     if matches:
         for match in matches:
@@ -165,3 +169,15 @@ def alert_matches_predict():
                 print('----- Message not sent')
         except Exception as e:
             print(e)
+
+
+def write_csv(matches):
+    print('----- Writing csv')
+    now = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    df = pd.DataFrame(matches)
+    filename = 'matches_'+str(now)+'.csv'
+    df.to_csv(filename, index=False, header=True)
+    print('----- Uploading to cloudinary')
+    result = upload_file(os.path.join(os.getcwd(), filename), filename)
+    print(result)
+

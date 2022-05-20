@@ -160,7 +160,6 @@ REST_FRAMEWORK = {'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.Dja
                   }
 
 CRON_CLASSES = [
-    # "app.cron.MyCronJob",
 ]
 
 CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379')
@@ -176,3 +175,12 @@ SITE_ID = 1
 
 
 LOCAL = os.getenv('LOCAL', 'True')
+
+
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL', 'cloudinary://113285428392752:WIU52UMg6lglL_OmrH3Pe1Gbrzk@help-m-sician')
+CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY',
+                               '113285428392752')
+CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET',
+                                  'WIU52UMg6lglL_OmrH3Pe1Gbrzk')
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME',
+                                  'help-m-sician')

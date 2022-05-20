@@ -19,6 +19,7 @@ django-crontab
 django_cron
 gunicorn==20.1.0
 markdown
+pandas
 Pillow
 pyimgur
 psycopg2-binary==2.8.6

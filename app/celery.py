@@ -14,19 +14,19 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'matches-collect': {
         'task': 'app.tasks.update_matches',
-        'schedule': crontab(hour="*/2"),
+        'schedule': crontab(minute='*/5'),
     },
     'alert-today': {
         'task': 'app.tasks.alert_matches_today',
-        'schedule': crontab(hour="*/4"),
+        'schedule': crontab(hour='*/4'),
     },
     'alert-week': {
         'task': 'app.tasks.alert_matches_week',
-        'schedule': crontab(hour="*/4", day_of_week="mon"),
+        'schedule': crontab(hour='*/4', day_of_week="mon"),
     },
     'alert-predict': {
         'task': 'app.tasks.alert_matches_predict',
-        'schedule': crontab(hour="*/4"),
+        'schedule': crontab(hour='*/4'),
     },
 }
 
