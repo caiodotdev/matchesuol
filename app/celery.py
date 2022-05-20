@@ -18,8 +18,16 @@ app.conf.beat_schedule = {
     },
     'alert-today': {
         'task': 'app.tasks.alert_matches_today',
-        'schedule': crontab(minute="*/2"),
-    }
+        'schedule': crontab(hour="*/4"),
+    },
+    'alert-week': {
+        'task': 'app.tasks.alert_matches_week',
+        'schedule': crontab(hour="*/4", day_of_week="mon"),
+    },
+    'alert-predict': {
+        'task': 'app.tasks.alert_matches_predict',
+        'schedule': crontab(hour="*/4"),
+    },
 }
 
 

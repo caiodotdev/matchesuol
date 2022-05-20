@@ -39,11 +39,11 @@ admin.site.register(Time, TimeAdmin)
 class MatchAdmin(admin.ModelAdmin):
     list_filter = []
     search_fields = (
-        'id',
+        'id', 'time1__nome_comum', 'time2__nome_comum', 'competicao__nome'
     )
     inlines = []
     list_display = (
-        "id", "id_match", "competicao", "id_competicao", "time1", "time2", "data", "horario", "local", "estadio",
+        "id", "id_match", "competicao", "time1", "time2", "data", "horario", "local", "estadio",
         "rodada",
         "posicao", "placar1", "placar2", "penalti1", "penalti2", "eliminou_jogo_volta", "classificou_gols_fora",
         "datahora",

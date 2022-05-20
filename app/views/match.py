@@ -11,6 +11,9 @@ from django.views.generic.edit import (
     CreateView, DeleteView, UpdateView
 )
 from django.views.generic.list import ListView
+from soupsieve import match
+
+from app.predictz import PredictZ
 
 try:
     from django.core.urlresolvers import reverse_lazy

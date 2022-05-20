@@ -60,6 +60,8 @@ class Match(Timestamp):
     desempate_time2 = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+    predict_score = models.CharField(max_length=255, blank=True, null=True)
+    predict_result = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return str(self.pk)

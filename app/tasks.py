@@ -3,6 +3,8 @@ import datetime
 from celery import shared_task
 from django_celery_results.models import TaskResult
 
+from app.predictz import PredictZ
+
 from .models import Match, Competicao, Time
 from .serializers import MatchSerializer
 from .uol_jogos import UolAPI
@@ -25,6 +27,9 @@ def clean_tasks_results():
 def update_matches():
     api = UolAPI()
     count_existing = 0
+    qs = Match.objects.filter(data__lt=datetime.datetime.now())
+    print('elements to delete :' + str(len(qs)))
+    qs.all().delete()
     matches = api.get_matches()
     print('qtd matches by UOL: ', len(matches))
     for match in matches:
@@ -77,25 +82,24 @@ CHAT_ID = '451429199'
 URI = 'https://api.telegram.org/bot{}/sendMessage'
 
 
-def telegram_alert(matches):
+def telegram_alert(matches, message):
     print('----- Sending Telegram alert')
     for match in matches:
-        message = MESSAGE.format(match.competicao.nome,
-                                 match.time1.nome_comum,
-                                 match.time2.nome_comum,
-                                 match.horario,
-                                 match.local,
-                                 match.estadio)
-        print(message)
-        try:
-            response = requests.get(URI.format(TOKEN),
-                                    params={'chat_id': CHAT_ID, 'text': message})
-            if response.status_code == 200:
-                print('----- Message sent')
-            else:
-                print('----- Message not sent')
-        except Exception as e:
-            print(e)
+        message = message + MESSAGE.format(match.competicao.nome,
+                                           match.time1.nome_comum,
+                                           match.time2.nome_comum,
+                                           match.horario,
+                                           match.local,
+                                           match.estadio)
+    try:
+        response = requests.get(URI.format(TOKEN),
+                                params={'chat_id': CHAT_ID, 'text': message})
+        if response.status_code == 200:
+            print('----- Message sent')
+        else:
+            print('----- Message not sent')
+    except Exception as e:
+        print(e)
 
 
 @shared_task()
@@ -107,7 +111,57 @@ def alert_matches_today():
     print('----- Sending Telegram alert for matches today')
     today = datetime.datetime.now()
     matches = Match.objects.filter(data=today.date())
+    message = '🔔 Jogos de hoje: \n\n'
     if matches:
-        telegram_alert(matches)
+        telegram_alert(matches, message)
     else:
         print('----- No matches today')
+
+
+@shared_task()
+def alert_matches_week():
+    """
+    Send a Telegram alert for matches today.
+    :return:
+    """
+    print('----- Sending Telegram alert for matches week')
+    today = datetime.date.today()
+    last_monday = today - datetime.timedelta(days=today.weekday())
+    one_week = datetime.timedelta(days=7)
+    end_of_week = last_monday + one_week
+    matches = Match.objects.filter(
+        data__gte=last_monday, data__lte=end_of_week).order_by('data')
+    message = '🔔 Jogos da semana: \n\n'
+    if matches:
+        telegram_alert(matches, message)
+    else:
+        print('----- No matches week')
+
+
+@shared_task()
+def alert_matches_predict():
+    """
+    Send a Telegram alert for matches predict today.
+    :return:
+    """
+    print('----- Matches predict')
+    predict = PredictZ()
+    matches = predict.get_matches()
+    message = '🔔 Predições de HOJE: \n\n'
+    MESSAGE_ITEM = "⚽ {} \n Predict Score: {} \n Predict Result: {} \n\n"
+    print('---matches predict: ', len(matches))
+    if matches:
+        for match in matches:
+            message = message + \
+                MESSAGE_ITEM.format(
+                    match['dispute'], match['predict_score'], match['predict_result'])
+        try:
+            response = requests.get(URI.format(TOKEN),
+                                    params={'chat_id': CHAT_ID, 'text': message})
+            if response.status_code == 200:
+                print('----- Message sent')
+            else:
+                print(response)
+                print('----- Message not sent')
+        except Exception as e:
+            print(e)

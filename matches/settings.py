@@ -173,3 +173,6 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 SERVER_URL = 'http://localhost:8000'
 # SERVER_URL = 'http://10.0.0.196'
 SITE_ID = 1
+
+
+LOCAL = os.getenv('LOCAL', 'True')
