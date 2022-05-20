@@ -14,7 +14,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'matches-collect': {
         'task': 'app.tasks.update_matches',
-        'schedule': crontab(minute="*/2"),
+        'schedule': crontab(hour="*/2"),
     },
     'alert-today': {
         'task': 'app.tasks.alert_matches_today',
